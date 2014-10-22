@@ -1,6 +1,6 @@
 {
   "name": "DAV Contacts DS",
-  "type": "certified",
+  "type": "privileged",
   "launch_path": "/index.html",
   "datastores-owned": {
     "contacts": {
