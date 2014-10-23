@@ -2,15 +2,12 @@
   "name": "DAV Contacts DS",
   "type": "privileged",
   "launch_path": "/index.html",
-  "datastores-owned": {
-    "contacts": {
-      "access": "readwrite",
-      "description": "Provider 3 contacts"
-    }
-  },
   "permissions": {
     "systemXHR": {
       "description": "This permission is require to contact CardDAV servers"
+    },
+    "contacts": {
+      "access": "readwrite"
     }
   }
 }
