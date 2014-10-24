@@ -1,7 +1,12 @@
 {
-  "name": "DAV Contacts DS",
+  "name": "DAV Contacts",
   "type": "privileged",
   "launch_path": "/index.html",
+  "icons": {
+      "512": "/icons/1414202790_contacts-512.png",
+      "128": "/icons/1414202990_contacts-128.png",
+      "64": "/icons/1414202990_contacts-64.png"
+  },
   "permissions": {
     "systemXHR": {
       "description": "This permission is require to contact CardDAV servers"
