@@ -1,0 +1,3 @@
+[submodule "lib/js/jsDAVlib"]
+	path = js/lib/jsDAVlib
+	url = https://github.com/frsela/jsDAVlib.git
