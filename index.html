@@ -1,7 +1,9 @@
 <html>
 <head>
   <meta charset="utf-8">
+
   <title>FireDAV</title>
+
   <script defer src="/bower_components/jsDAVlib/src/jsDAVlib.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVXMLParser.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVConnection.js"></script>
@@ -9,10 +11,14 @@
   <script defer src="/bower_components/jsDAVlib/src/jsDAVResource.js"></script>
   <script defer src="/js/app.js"></script>
 
+  <link href="/gaia/shared/style/keyboard_symbols" rel="stylesheet" type="text/css">
   <link href="/gaia/shared/style/buttons.css" rel="stylesheet" type="text/css">
   <link href="/gaia/shared/style/headers.css" rel="stylesheet" type="text/css">
   <link href="/gaia/shared/style/input_areas.css" rel="stylesheet" type="text/css">
   <link href="/gaia/shared/style/layout.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/progress_activity.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/confirm.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/status.css" rel="stylesheet" type="text/css">
 
   <link href="/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -27,24 +33,42 @@
 </section>
 <section id="info"></section>
 
-<section id="config" class="vbox fit">
+<section id="config" class="vbox fit scroll">
   <form>
     <h1>Contacts</h1>
     <p>
-      <input type="text" name="url" id="url" placeholder="CardDAV URL" value="https://my.owndrive.com/remote.php/carddav/addressbooks/oli/contacts">
+      <input type="text" name="url" id="url" placeholder="CardDAV URL">
     </p>
 
     <p>
-      <input type="text" name="user" id="user" placeholder="username" value="Oli">
+      <input type="text" name="user" id="user" placeholder="username">
     </p>
 
     <p>
-      <input type="password" name="passwd" id="passwd" placeholder="password" >
+      <input type="password" name="passwd" id="passwd" placeholder="password">
     </p>
   </form>
 </section>
 <footer class="gaia-footer">
-  <button id="fillDS">Import</button>
+  <button id="import">Import</button>
 </footer>
+
+<form role="dialog" data-type="confirm" id="importing-screen">
+  <section>
+    <h1>Importing contacts</h1>
+    <p role="status">
+      <span id="progress-status">?/?</span>
+      <progress id="progress" value="0" max="100"></progress>
+    </p>
+  </section>
+  <menu>
+    <button class="full">Cancel</button>
+  </menu>
+</form>
+
+<section role="status" id="import-done" class="ease">
+  <p>Contacts imported</p>
+</section>
+
 </body>
 </html>

@@ -2,137 +2,118 @@
 
 'use strict';
 
-var App = function App() {
+function App() {
+  console.log("Starting app");
+  var self = this;
 
-  var store = null;
-  var info = null;
-  var fillButton, resetButton;
+  var info = document.getElementById('info');
+  var fillButton = document.getElementById('import');
+  var dialog = document.getElementById('importing-screen');
+  var progress = document.getElementById('progress');
 
-  var init = function init() {
-    info = document.getElementById('info');
-    fillButton = document.getElementById('fillDS');
-    resetButton = document.getElementById('resetDS');
+  fillButton.addEventListener('click', function() {
+    console.log("clicked !");
+    self.importContacts();
+  });
 
-    fillButton.addEventListener('click', handleEvent);
-    resetButton.addEventListener('click', handleEvent);
+  self.reset = function() {
+    var q = confirm("Remove ALL the contacts from ? Be careful!!! There is no way back!");
+    if (q) {
+      var req = navigator.mozContacts.clear();
+      req.onsuccess = function () {
+        alert('All contacts have been removed.');
+      };
+      req.onerror = function () {
+        alert('[error] No contacts were removed.');
+      };
+    }
   };
 
-  function handleEvent(evt) {
-    var btn = evt.target.id;
+  self.importContacts = function() {
+    console.log('Importing');
     var accountData = {
       url: document.getElementById('url').value,
       user: document.getElementById('user').value,
       password: document.getElementById('passwd').value
     };
 
-    switch (btn) {
-      case 'fillDS':
-        fillButton.disabled = true;
+    //fillButton.disabled = true;
 
-        var openedDAVConnection = jsDAVlib.getConnection(accountData);
-        openedDAVConnection.onready = function() {
-          console.log('connectionInfo: ' +
-            JSON.stringify(openedDAVConnection.getInfo()));
+    var openedDAVConnection = jsDAVlib.getConnection(accountData);
 
-          openedDAVConnection.getResource(null, function(res, error) {
-            if (error) {
-              console.log('Error getting main resource - ' + error);
-              return;
+    openedDAVConnection.onready = function () {
+      console.log('connectionInfo: ' +
+      JSON.stringify(openedDAVConnection.getInfo()));
+
+      openedDAVConnection.getResource(null, function (res, error) {
+        if (error) {
+          console.log('Error getting main resource - ' + error);
+          return;
+        }
+
+        dialog.style.display = "block";
+
+        var contactsList = res.get().data;
+        var progressStatus = document.getElementById('progress-status');
+        var contactsNb = contactsList.length;
+        var contactsDone = 0;
+
+        progress.max = contactsNb;
+        progress.value = contactsDone;
+        progressStatus.innerHTML = String(contactsDone)+"/"+String(contactsNb);
+        progress.style.display = "block";
+
+        for (var i = 0; i < contactsNb; i++) {
+          openedDAVConnection.getResource(contactsList[i].href, function (res, e) {
+            var vcard = res.contents.split('\r\n');
+            var contact = new mozContact();
+            for (var j = 0; j < vcard.length; j++) {
+              if (/^N:/.test(vcard[j])) {
+                var name = vcard[j].split(':')[1].split(';');
+                contact.familyName = [name[0]];
+                contact.givenName = [name[1]];
+                contact.additionalName = [name[2]];
+                contact.honorificPrefix = [name[3]];
+                contact.honorificSuffix = [name[4]];
+              } else if (/^FN:/.test(vcard[j])) {
+                var name = vcard[j].split(':');
+                contact.name = [name[1]];
+              } else if (/^TEL;/.test(vcard[j])) {
+                var allTel = vcard[j].split(';');
+                var tel = allTel[1].split(':');
+                contact.tel = [{
+                  type: [tel[0].split('=')[1]],
+                  value: tel[1]
+                }];
+              }
             }
 
-            var openedDAVMainResource = res;
+            var saving = navigator.mozContacts.save(contact);
+            saving.onsuccess = function () {
+              contactsDone += 1;
+              progressStatus.innerHTML = String(contactsDone)+"/"+String(contactsNb);
+              progress.value = contactsDone;
+              if(contactsDone === contactsNb) {
+                dialog.style.display = "none";
+                var status = document.getElementById("import-done");
+                status.classList.add("show");
+                setTimeout(function() {
+                  status.classList.remove("show");
+                }, 5000);
+              }
 
-            var contactsList = openedDAVMainResource.get().data;
-            var contactsResource = [];
-            for (var i = 0; i < contactsList.length; i++) {
-              openedDAVConnection.getResource(contactsList[i].href, function(res, e) {
-                var vcard = res.contents.split('\r\n');
-                var contact = new mozContact();
-                for (var j = 0; j < vcard.length; j++) {
-                  if (/^N:/.test(vcard[j])) {
-                    var name = vcard[j].split(':')[1].split(';');
-                    contact.familyName = [name[0]];
-                    contact.givenName = [name[1]];
-                    contact.additionalName = [name[2]];
-                    contact.honorificPrefix = [name[3]];
-                    contact.honorificSuffix = [name[4]];
-                  } else if (/^FN:/.test(vcard[j])) {
-                    var name = vcard[j].split(':');
-                    contact.name = [name[1]];
-                  } else if (/^TEL;/.test(vcard[j])) {
-                    var allTel = vcard[j].split(';');
-                    var tel = allTel[1].split(':');
-                    contact.tel = [{
-                      type: [tel[0].split('=')[1]],
-                      value: tel[1]
-                    }];
-                  }
-                }
-
-                var saving = navigator.mozContacts.save(contact);
-                saving.onsuccess = function() {
-                  console.log('new contact saved');
-                };
-                saving.onerror = function(err) {
-                  console.error(err);
-                };
-              });
-            }
+              console.log('new contact saved');
+            };
+            saving.onerror = function (err) {
+              console.error(err);
+            };
           });
-        };
-
-        break;
-      case 'resetDS':
-        var q = confirm("Remove ALL the contacts from ? Be careful!!! There is no way back!");
-        if (q) {
-          var req = navigator.mozContacts.clear();
-          req.onsuccess = function() {
-            alert('All contacts have been removed.');
-          };
-          req.onerror = function() {
-            alert('[error] No contacts were removed.');
-          };
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
-  function initDS() {
-    function storeError() {
-      info.textContent = 'Error getting store';
-    }
-
-    if (!navigator.getDataStores) {
-      info.textContent = 'NO DataStore API!';
-      return;
-    }
-
-    navigator.getDataStores(DS_NAME).then(function(ds) {
-      if (!ds || ds.length < 1) {
-        storeError();
-        return;
-      }
-      ds.forEach(function onDs(datastore) {
-        if (datastore.owner.indexOf('provider3')) {
-          store = datastore;
-          console.log('Got store ' + store.owner);
         }
       });
-
-      store.getLength().then(function(count) {
-        info.textContent = count + ' elements';
-      });
-    }, function() {
-      storeError();
-    });
-  }
-
-  return {
-    init: init
+    };
   };
 
-}();
+  console.log("App ready");
+}
 
-App.init();
+var app = new App();

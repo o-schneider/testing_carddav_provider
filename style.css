@@ -8,4 +8,23 @@ body {
   background: none;
 }
 
-form { margin: 1rem 1.5rem; }
+.ease {
+  -webkit-transition: all 600ms cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition:         all 600ms cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+#config > form {
+  margin: 1rem 1.5rem;
+}
+
+#importing-screen, #progress {
+  display: none;
+}
+
+#import-done {
+  transform: translateY(100%);
+}
+
+#import-done.show {
+  transform: translateY(0%);
+}
