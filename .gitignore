@@ -1,4 +1,4 @@
 .idea
 *.iml
-bower_components
+app/bower_components
 dav-test

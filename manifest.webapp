@@ -1,7 +1,7 @@
 {
   "name": "FireDAV",
   "type": "privileged",
-  "launch_path": "/index.html",
+  "launch_path": "/app/index.html",
   "permissions": {
     "systemXHR": {
       "description": "This permission is require to contact CardDAV servers"
