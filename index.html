@@ -1,42 +1,50 @@
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
   <meta charset="utf-8">
-  <title>Provider CardDAV</title>
+  <title>FireDAV</title>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVlib.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVXMLParser.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVConnection.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVCommunications.js"></script>
   <script defer src="/bower_components/jsDAVlib/src/jsDAVResource.js"></script>
   <script defer src="/js/app.js"></script>
+
+  <link href="/gaia/shared/style/buttons.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/headers.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/input_areas.css" rel="stylesheet" type="text/css">
+  <link href="/gaia/shared/style/layout.css" rel="stylesheet" type="text/css">
+
+  <link href="/style.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-<section>
+<body role="application">
+<section role="region">
   <header>
-    <h1>CardDAV contacts provider</h1>
+    <h1>FireDAV</h1>
   </header>
-  <article>
-    This test app will allow you to log in into your CardDAV provider and store your contacts into an 'contacts' datastore.
-  </article>
+  <header>
+    <h2>Frontend for DAV synchronization in Firefox OS using jsDAVlib</h2>
+  </header>
 </section>
 <section id="info"></section>
-<section id="config">
-  <div>
-    <label for="url">DAV URL</label>
-    <input type="url" name="url" id="url" value="" />
-  </div>
-  <div>
-    <label for="user">DAV User</label>
-    <input type="text" name="user" id="user" value="" />
-  </div>
-  <div>
-    <label for="passwd">DAV Password</label>
-    <input type="password" name="passwd" id="passwd" value="" />
-  </div>
+
+<section id="config" class="vbox fit">
+  <form>
+    <h1>Contacts</h1>
+    <p>
+      <input type="text" name="url" id="url" placeholder="CardDAV URL" value="https://my.owndrive.com/remote.php/carddav/addressbooks/oli/contacts">
+    </p>
+
+    <p>
+      <input type="text" name="user" id="user" placeholder="username" value="Oli">
+    </p>
+
+    <p>
+      <input type="password" name="passwd" id="passwd" placeholder="password" >
+    </p>
+  </form>
 </section>
-<section id="commands">
-  <button id="fillDS">Fill DataStore</button>
-  <button id="resetDS">Reset DataStore</button>
-</section>
+<footer class="gaia-footer">
+  <button id="fillDS">Import</button>
+</footer>
 </body>
 </html>

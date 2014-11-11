@@ -1,5 +1,5 @@
 {
-  "name": "DAV Contacts DS",
+  "name": "FireDAV",
   "type": "privileged",
   "launch_path": "/index.html",
   "permissions": {

@@ -1,0 +1,11 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+body {
+  background: none;
+}
+
+form { margin: 1rem 1.5rem; }
