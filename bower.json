@@ -1,0 +1,21 @@
+{
+  "name": "FireDAV",
+  "version": "0.0.0",
+  "homepage": "https://github.com/o-schneider/testing_carddav_provider",
+  "authors": [
+    "Olivier Schneider <olivier.schneider@opengroupware.ch>"
+  ],
+  "description": "Frontend for DAV synchronization in FFOS using jsDAVlib",
+  "license": "GPL3",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jsDAVlib": "https://github.com/o-schneider/jsDAVlib.git"
+  }
+}
